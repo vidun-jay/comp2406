@@ -25,16 +25,20 @@ function handlePuzzleButton() {
     let xhttp = new XMLHttpRequest()
     xhttp.onreadystatechange = function () {
       if (this.readyState == 4 && this.status == 200) {
-        console.log("data: " + this.responseText)
-        console.log("typeof: " + typeof this.responseText)
+
         // we are expecting the response text to be a JSON string
         let responseObj = JSON.parse(this.responseText)
 
         words = [] // reset words
-        for (let i = 0; i < responseObj.puzzleLines.length; i++) {
-          for (let word of responseObj.puzzleLines[i].split(" "))
+        for (let i = 0; i < responseObj.originalLines.length; ++i) {
+          for (let word of responseObj.originalLines[i].split(" "))
           words.push({word: word, x: 50, y: 50})
         } randomizeLocation()
+
+        delete responseObj.originalLines
+        console.log("data: " + JSON.stringify(responseObj))
+        console.log("typeof: " + typeof this.responseText)
+
         drawCanvas()
       }
     }
@@ -70,8 +74,6 @@ function handleSolveButton() {
   for (let row of user_attempt)
     row.sort((a, b) => a.x - b.x)
 
-  console.log(user_attempt);
-
   // print user attempt to screen
   let plain_text = ""
   let textDiv = document.getElementById("text-area")
@@ -86,13 +88,17 @@ function handleSolveButton() {
   }
 
   // check if attempt is correct
-  comparison = true
+  let comparison = true
   for (let i = 0; i < words.length; ++i)
     if (user_attempt.flat()[i].word !== words[i].word) comparison = false
 
   // print answer
   if (comparison)
     textDiv.innerHTML += `<p style="color: green;"> ${plain_text}</p>`
+    // alert("Congratulations! You solved the puzzle.")
   else
     textDiv.innerHTML += `<p style="color: red;"> ${plain_text}</p>`
+    // alert("Incorrect, try again.")
+
+  console.log(comparison);
 }

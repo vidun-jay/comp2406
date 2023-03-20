@@ -2,6 +2,7 @@
 const http = require('http') //need to http
 const fs = require('fs') //need to read static files
 const url = require('url') //to parse url strings
+const { log } = require('console')
 
 const ROOT_DIR = 'html' //dir to serve static files from
 
@@ -27,6 +28,26 @@ function get_mime(filename) {
     }
   }
   return MIME_TYPES['txt']
+}
+
+/**
+ * @brief Shuffles a given sentence
+ * @param {sentence} sentence to shuffle
+ * @returns shuffled sentence
+ */
+function shuffleWords(sentence) {
+  let words = sentence.split(" ")
+  let shuffled_words = words.slice()
+
+  // shuffle the words randomly but make sure it doesn't ever be the original text
+  while (words.join(" ") === sentence) {
+    for (let i = words.length - 1; i > 0; --i) {
+      let j = Math.floor(Math.random() * (i + 1));
+      let temp = words[i];
+      words[i] = words[j];
+      words[j] = temp;
+    }
+  } return words
 }
 
 http.createServer(function(request, response) {
@@ -80,14 +101,13 @@ http.createServer(function(request, response) {
             response.end(JSON.stringify(returnObj))
           } else {
             var fileLines = data.toString().split("\n")
-            //get rid of any return characters
-            for (i in fileLines)
-              fileLines[i] = fileLines[i].replace(/(\r\n|\n|\r)/gm, "")
             returnObj.text = puzzleFile
-            returnObj.puzzleLines = fileLines
+            returnObj.originalLines = fileLines
+            returnObj.puzzleLines = shuffleWords(fileLines.join(" "))
             returnObj.filePath = puzzleFile
             response.writeHead(200, { "Content-Type": MIME_TYPES["json"] })
             response.end(JSON.stringify(returnObj))
+            // fileLines = shuffleWords(fileLines.toString())
           }
         })
       }
@@ -123,6 +143,7 @@ http.createServer(function(request, response) {
   })
 }).listen(3000)
 
+// console.log(`File lines: ${fileLines}`);
 console.log('Server Running at http://127.0.0.1:3000  CTRL-C to quit')
 console.log('To Test')
 console.log('http://localhost:3000/index.html')

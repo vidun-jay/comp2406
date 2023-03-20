@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>COMP 2406</title>
+<link href="template.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+.requirement {font-weight: bold;
+	background-color: #6AF37A;
+}
+.requirement_danger {font-weight: bold;
+	background-color: #F47272
+}
+.requirement_warning {font-weight: bold;
+	background-color: #F6CA54
+}
+</style>
+</head>
+
+<body>
+<p class="header">COMP 2406 - Winter 2023</p>
+<p class="header subheader">Tut 07: RESTful API's and Express.js</p>
+<p>&copy;<span style="font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 20px; color: rgb(34, 34, 34); background-color: rgb(255, 255, 255)"> </span>L.D. Nel 2023</p>
+<hr />
+<p class="red">Revisions will be noted here. </p>
+<p class="red">&nbsp;</p>
+<hr>
+<p class="segment-header">Description:</p>
+<p>With this tutorial we introduce using RESTful API servers, or services. Many servers now provide an API that lets you query them for data. They provide JSON or XML data rather than providing  a webpage as a response. This is because many clients now have javascript that asynchronously updates page contents and thus query servers through their API (application programming interface) expecting JSON data rather than a new html web page to load.</p>
+<p>We also introduce an important new use-case: that of the server acting as a client of another server.</p>
+<p>This tutorial has two parts. In part I we build a <span class="black-bold">thin-client</span> with just node.js and it's built in modules. In part II we build a <span class="black-bold">thick-client</span> using the express.js framework. An important point is to compare the two different styles. Both the style of a thick vs. thin client and the style of an express.js app compared to the conventional node.js apps you have been building so far in the course.</p>
+<p>Problem 4 of this tutorial is what Assignment 4 will be based on.</p>
+<p>&nbsp;</p>
+<p class="red">IMPORTANT: To do this tutorial you will need to sign up for both a openweather.org API key These keys can take up to an hour or more to activate so you need to do this well in advance of attempting the tutorial.</p>
+<p class="red">You can sign up for an openweather.org API key at: <a href="http://openweathermap.org/appid">http://openweathermap.org/appid</a></p>
+<p class="red">These API keys will have to be pasted into your code in order to connect with their API server.</p>
+<p><span class="red">Important: tutorials are meant to be started and submitted as homework. You can come and get help each week at the your registered tutorial session but it's best to get started before the session.</span></p>
+<p class="red">Tutorial Grading: To get credit for weekly tutorials you need to submit to brightspace your code and a ReadMe.txt file with at least your name, student number and the link to your YouTube screen capture demonstration video. The video should have sound narration and demonstrate that you have met the tutorial requirements. (Make sure your video is &quot;unlisted&quot; and not &quot;private&quot; on YouTube - otherwise we won't be able to view it and it will be counted as missing. Submit a single .zip file with all your contents to Brightspace. Brightspace should allow you to resubmit your file up until the due time and will only keep the most recent submission. Grade is 0,1, or 2 as follows:</p>
+<table border="1">
+  <tr>
+    <th width="83">Mark</th>
+    <th width="716">Tutorial Grading</th>
+  </tr>
+  <tr>
+    <td style="text-align: center"><h1><span class="requirement_danger">0</span></h1>
+      <p>marks</p></td>
+    <td><p><span class="requirement_danger">No submission or incomplete submission. Submissions without accompanying video get a mark of 0</span>.</p>
+      <p>Note: mark is 0 if any of the following are true:<br>
+      <ul>
+        <li>code missing or won't compile and launch.</li>
+        <li>No demonstration video link or link is broken (e.g. private).</li>
+        <li class="red">NEW: Video must be screen capture (not filming your laptop screen with your phone, for example).</li>
+        <li>Work is copied (not unique).</li>
+        <li>No ReadMe.txt file containing YouTube video link</li>
+        <li>Non .zip compression format (only  .zip is accepted)</li>
+        <li>If using NPM modules you MUST NOT submit the <span class="code">node_modules</span> directory but you MUST submit the <span class="code">package.json</span> and <span class="code">package-lock.json</span> files. </li>
+      </ul>
+      <br>
+      </p></td>
+  </tr>
+  <tr>
+    <td style="text-align: center"><h1><span class="requirement_warning">1</span></h1>
+      <p>mark</p></td>
+    <td><p><span class="requirement_warning">Some, but not enough, requirements met or demonstrated</span>.</p>
+      <p>Note: mark is only 1 if any of the following are true:<br>
+      <ul>
+        <li>Video has no voice narration.</li>
+        <li>Cannot make out (see) your code or mouse in your video.</li>
+        <li>Video is too long (keep under 5 mins - like a live demo).</li>
+        <li>Video is not a demo but rather just shows you coding.</li>
+        <li>Not all requested problems attempted and demonstrated.</li>
+        <li>Code works but it's not good programming style.</li>
+      </ul>
+      <br>
+      </p></td>
+  </tr>
+  <tr>
+    <td style="text-align: center"><h1><span class="requirement">2</span></h1>
+      <p>marks</p></td>
+    <td><p><span class="requirement">All requirements met and demonstrated in accompanying video for required problems.</span></p>
+      <p>Does not include problems labelled as &quot;Optional&quot;</p></td>
+  </tr>
+</table>
+<p class="red"></p>
+<p class="red"><br />
+</p>
+<hr/>
+<p class="segment-header">&nbsp;</p>
+<p class="segment-header">Part I: Node.js-based Thin Client:</p>
+<p class="segment-header">&nbsp;</p>
+<p><span class="red">The demo code will not work until you insert your own API_KEY in server code.</span><span class="red">You can sign up for an openweather.org API key at: <a href="https://openweathermap.org/appid">https://openweathermap.org/appid</a></span></p>
+<p>Here are some screen capturews of what it looked like when I created an account and signed up for an API key:</p>
+<p><img src="images/01openweatherAPIkey.png" alt=""/></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><img src="images/02openweatherAPIkey.png"  alt=""/></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><img src="images/03openweatherAPIkey.png"  alt=""/></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><img src="images/04openweatherAPIkey.png"  alt=""/></p>
+<p>&nbsp;</p>
+<p>Open the  the   <span class="code">demo_code_nodejs_thin_client</span> folder  and run the  server  <span class="code">server.js</span> found there. To test the server open a browser to <span class="code">http://localhost:3000.</span> You should see a browser application that looks like the following. <span class="red">(The demo code will not work until you insert your own API_KEY in server code.)</span></p>
+<p>&nbsp;</p>
+<p><img src="images/demo1.png"  alt="demo1" /></p>
+<p>&nbsp;</p>
+<p>Type &quot;Ottawa&quot; into the textfield and click the <span class="black-bold">Get Weather</span> button. Initially I got an invalid key response because openweather can take some time (maybe an hour or so) to recognize your key:</p>
+<p><img src="images/demo2-0.png" alt="ottawa weather"></p>
+<p>&nbsp;</p>
+<p>Eventually it did recognize my key (I think I restarted the server also). You should see the current weather conditions for Ottawa as a result. (Go ahead and try other cities as well.)</p>
+<p>&nbsp;</p>
+<p><img src="images/demo2.png" alt="ottawa weather"></p>
+<p>&nbsp;</p>
+<p>Open the server  <span class="code">server.js</span> code in your favourite code editor and examine the code.</p>
+<p>Observe the following:</p>
+<p>1) The code uses, or requires, the <span class="code">querystring</span> built-in node module to help parse the query parameters in the POST request.</p>
+<p>2) The server code makes an HTTP GET request to another server hosted by api.openweathermap.org. That is, the server is acting as an HTTP client of another server. This is done in the following function:</p>
+<pre>
+function getWeather(city, res) {
+
+  //Make an HTTP GET request to the openweathermap API
+
+  //options object needed for http request to API server
+  let options = {
+    host: 'api.openweathermap.org',
+    path: '/data/2.5/weather?q=' + city +
+      '&appid=' + API_KEY
+  }
+  //create the actual http request and set up
+  //its handlers
+  http.request(options, function(apiResponse) {
+    let weatherData = ''
+    apiResponse.on('data', function(chunk) {
+      weatherData += chunk
+    })
+    apiResponse.on('end', function() {
+      sendResponse(weatherData, res)
+    })
+  }).end() //important to end the request
+           //to actually send the message
+}
+</pre>
+<p>Notice this function accesses another server on the internet through its API. Notice also that the code is required to provide an app ID key. Many API's have sprung up over recent years and recently most now require that you sign up and use an app id key they provide when accessing their services. Some of the free keys limit the amount of access you have to their API service.</p>
+<p>Notice this function does a http (GET) request to the weather server and then provides its own client with the JSON data that the weather API server returns.</p>
+<p>Study the entire code for  our weather server and then proceed with the tutorial problems 1 and 2.</p>
+<p>&nbsp;</p>
+<p>Here is an explanation of how the above request works.</p>
+<p>The <span class="code">request</span> function of the <span class="code">http</span> module allows our server to send http requests to other http servers and we don't need any external modules to do this. To make a request you must create a configuration, or options, object and provide a callback function to the <span class="code">request</span> function which is called when the response to the http request comes arrives. The generic form of the request looks like this (phrased with arrow functions instead):</p>
+<pre>
+  const options = {...}
+  http.request(options, (apiResponse) =&gt;{
+    let body = ''
+    apiResponse.on('data', (chunk) =&gt; {body += chunk})
+    apiResponse.on('end', ()=&gt; {
+      console.log(body) //we are done
+    })
+  }).end() //important to end the request
+           //to actually send the request
+</pre>
+<p>You can find more on this on the node.js documentation website: <a href="https://nodejs.org/dist/latest-v16.x/docs/api/http.html#httprequestoptions-callback">https://nodejs.org/dist/latest-v16.x/docs/api/http.html#httprequestoptions-callback</a></p>
+<p>By the way, there was a popular <span class="code">request</span> npm module that used to make all this a bit easier but it was recently  DEPRECATED.</p>
+<hr>
+<p class="segment-header">&nbsp;</p>
+<p class="segment-header">Problem 1)</p>
+<p>Notice our demo code implements a <span class="black-bold">thin client</span>. That is, the client is expecting the server to render the html pages. Notice also that the server serves HTML content to the browser, not by reading a file but, by constructing an html web page that consists of html tags merged with the data obtained from the weather service. This idea of combining html with data is called &quot;template rendering&quot; and there are &quot;template engines&quot; like <span class="black-bold">Handlebars</span>, <span class="black-bold">PUG</span> etc. made to help with this. We won't concern ouselves with those here though -we will look at them later in the course.</p>
+<p>Notice that the server effectively serves an html <span class="black-bold">form</span> to the client which is set up to send an HTTP POST request when the user clicks the <span class="black-bold">Get Weather</span> button, or hits the ENTER key. </p>
+<p>Also notice the form data is made accessible as a javascript object by using the <span class="code">querystring</span> module to parse the query data.</p>
+<p>For this problem we want to allow the user to use a GET request as well by, for example, accessing <span class="code">http://localhost:3000/?city=Ottawa</span> using the browser address bar. This should provide the server response as before but with the weather data for Ottawa included:</p>
+<p><img src="images/problem1.png" width="1233" height="417"></p>
+<p>To do this you need to add a new <span class="black-bold">route</span> (if-statement) in the server that detects a GET request and then uses the querystring module to parse the data to obtain the city. Use the existing code for clues on how to do this. Read up on how to use the querystring module if necessary. Basically the querystring module's parse method turns the query parameters (items specified with the <span class="code">?city=Ottawa</span> syntax in a URL) into a javascript object that lets you  access the parameters with syntax like <span class="code">object.city</span> for example. You can read more about querystring in the node.js API documentation here: <a href="https://nodejs.org/dist/latest-v16.x/docs/api/querystring.html">https://nodejs.org/dist/latest-v16.x/docs/api/querystring.html</a></p>
+<p>With this completed you should be able to query the weather by either typing a city name in the text field or by using the browser URL address bar directly. </p>
+<p>&nbsp;</p>
+<hr>
+<p class="segment-header">&nbsp;</p>
+<p class="segment-header">Problem 2)</p>
+<p>For this problem we want you to display the city name as part of the &quot;Weather Info&quot; heading in the web page. That is, in the<span class="code"> sendResponse()</span> function of the server we want you to include the name of the city so the user sees the following in their browser:</p>
+<p>&nbsp;</p>
+<p><img src="images/problem2.png" alt="ottawa weather"><span class="code"></span></p>
+<p class="segment-header">&nbsp;</p>
+<hr>
+<p class="segment-header">&nbsp;</p>
+<p class="segment-header">Part II: Express.js-based Thick Client:</p>
+<p class="segment-header">&nbsp;</p>
+<p><span class="red">The demo code will not work until you insert your own API_KEY in server code.</span><span class="red">You can sign up for an openweather.org API key at: <a href="https://openweathermap.org/appid">https://openweathermap.org/appid</a></span></p>
+<p>&nbsp;</p>
+<p>Part II is based on the demo code in <span class="code">demo_code_expressjs_thick_client</span> folder. In this case it is an <span class="black-bold">express.js</span> based version of the weather server. Again you will have to add your openweather.org API key to get the code to work.</p>
+<p>You should familiarize yourself with the online express.js documentation at <a href="https://expressjs.com">https://expressjs.com</a> Especially the &quot;Getting Started&quot; section including the &quot;Basic Routing&quot; subsection. </p>
+<p class="segment-header">&nbsp;</p>
+<hr>
+<p class="segment-header">&nbsp;</p>
+<p class="segment-header">Problem 3)</p>
+<p>To run the express-based demo you first need to install the <span class="code">express.js</span> npm modules and other helper modules we are using, like <span class="code">request</span>. The required modules are specified in the <span class="black-bold">dependencies</span> section of the <span class="code">package.json</span> file. To install those modules run the command</p>
+<p class="code">npm install</p>
+<p>from the directory where your code is located. This will install the  npm modules and create a <span class="code">node_modules</span> directory containing the installed modules. It will also create a <span class="code">package-lock.json</span> file which you can ignore for the purposes of this tutrorial. (FYI: the <span class="code">package-lock.json</span> file provides a snapshot of exactly what was installed in the <span class="code">node_modules</span> directory folder so that later you, or us, can install those exact modules, or have another development team member install the exact same modules you are using.)</p>
+<p>Study the express-based demo code. Run the code by exectuing <span class="code">node server.js</span> and verify that it works with your weather API key:</p>
+<p>&nbsp;</p>
+<p><img src="images/problem3-1.png" width="835" height="397" alt=""/></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>Alternatively  you can view the raw JSON weather data for a city specified as a query parameter in the browser address bar:</p>
+<p><img src="images/problem3-2.png" width="940" height="271" alt=""/></p>
+<p>Or if you have the JSON Formatter extension plugin installed in Chrome  (Here is a link to it but you must visit it from the Chrome browser <a href="https://chrome.google.com/webstore/detail/json-formatter/bcjindcccaagfpapjjmafapmmgkkhgoa?hl=en">link</a>) you can see the data displayed more neatly with indentation:</p>
+<p><img src="images/problem3-3.png" width="917" height="614" alt=""/></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<hr>
+<p class="segment-header">&nbsp;</p>
+<p class="segment-header">Problem 4)</p>
+<p>This problem will form the basis for assignment 4. </p>
+<p>Apple's iTunes provides an API which you can query data about music, movies etc. The following http request typed in a browser will provide the first two items it found for music tracks whose title are 'Body And Soul'. Notice in the URL the multiword title requires plus signs instead of blanks. Give the following a try with your browser:</p>
+<p>https://itunes.apple.com/search?term=Body+And+Soul&amp;entity=musicTrack&amp;limit=3</p>
+<p>Notice it uses https:// and not http://. </p>
+<p>When I try that with my browser it actually downloads a text file with the three song results in it. You can read more about the iTunes API at the following link but more details are not required at this point: <a href="https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/index.html">https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/index.html</a></p>
+<p>&nbsp;</p>
+<p>Similar to the weather example from the previous problem the following code can be used within a node.js express server to query the iTunes API. (notice iTunes does not require you to have an APP_ID. )</p>
+<pre>
+
+const titleWithPlusSigns = 'Body+And+Soul'
+  
+const options = {
+    "method": "GET",
+    "hostname": "itunes.apple.com",
+    "port": null,
+    "path": `/search?term=${titleWithPlusSigns}&entity=musicTrack&limit=3`,
+    "headers": {
+      "useQueryString": true
+    }
+  }
+  //create the actual http request and set up
+  //its handlers
+  http.request(options, function(apiResponse) {
+    let songData = ''
+    apiResponse.on('data', function(chunk) {
+      songData += chunk
+    })
+    apiResponse.on('end', function() {
+      response.contentType('application/json').json(JSON.parse(songData))
+    })
+  }).end() //important to end the request
+           //to actually send the message
+</pre>
+<p>&nbsp;</p>
+<p>So with  problem 3 as a warm up, we want you to take the express-based demo code from problem 3, make a copy of it, and make all the modifications necessary to search for songs on iTunes API based on their song title instead of getting the weather of cities. Make sure you change any &quot;weather related code&quot; appropriately. That is, don't have the function  <span class="code">getWeather()</span> actually getting songs or the variable called <span class="code">city</span> referring to a song's title. Change the names of functions and variables to be appropriate.</p>
+<p>When you are done you should be able to use the textfield and submit button or just use the URL address bar as you did in problem 3 for the weather. Here are a couple of screen captures of what we should see in your demonstration video.</p>
+<p>&nbsp;</p>
+<p><img src="images/problem4-1.png" width="807" height="574" alt=""/></p>
+<p class="red">&nbsp;</p>
+<p class="red"><img src="images/problem4-2.png" width="665" height="722" alt=""/></p>
+<p class="red">&nbsp;</p>
+<p class="red">When you have completed these problems create a screen capture video, with sound, that demonstrates you've completed problem 4. Show both cases: using the submit button and using the browser URL address bar. Submit your code and readme.txt file (containing your YouTube link) to brightpace. </p>
+
+</body>
+</html>

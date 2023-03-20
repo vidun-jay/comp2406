@@ -36,7 +36,7 @@ function handleMouseDown(e) {
   //get mouse location relative to canvas top left
   let canvasMouseLoc = getCanvasMouseLocation(e)
 
-  console.log("mouse down:" + canvasMouseLoc.canvasX + ", " + canvasMouseLoc.canvasY)
+  // console.log("mouse down:" + canvasMouseLoc.canvasX + ", " + canvasMouseLoc.canvasY)
 
   wordBeingMoved = getWordAtLocation(canvasMouseLoc.canvasX, canvasMouseLoc.canvasY)
   //console.log(wordBeingMoved.word)
@@ -60,7 +60,7 @@ function handleMouseDown(e) {
 
 function handleMouseMove(e) {
 
-  console.log("mouse move");
+  // console.log("mouse move");
 
   //get mouse location relative to canvas top left
   //var rect = canvas.getBoundingClientRect()
@@ -79,7 +79,7 @@ function handleMouseMove(e) {
 
 function handleMouseUp(e) {
 
-  console.log("mouse up")
+  // console.log("mouse up")
 
   e.stopPropagation()
 
