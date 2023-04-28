@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>2406 Tutorial</title>
+<link href="template.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+.requirement {font-weight: bold;
+	background-color: #6AF37A;
+}
+.requirement_danger {font-weight: bold;
+	background-color: #F47272
+}
+.requirement_warning {font-weight: bold;
+	background-color: #F6CA54
+}
+</style>
+</head>
+
+<body>
+<p class="header">COMP 2406 - Winter 2023 Tutorial 8</p>
+<p class="header subheader">SQLite Database with CLI</p>
+<hr/>
+<p>&copy; L.D. Nel 2023</p>
+<hr />
+<p class="red">&nbsp;</p>
+<hr />
+<p class="segment-header">Description:</p>
+<p>The purpose of this tutorial is to get you familiar with relational database concepts and using the SQLite database from its CLI (Command Line Interface). You should watch the video lecture on Database Concepts before attempting this tutorial.</p>
+<p><span class="red">Important: tutorials are meant to be started and submitted as homework. You can come and get help each week at the your registered tutorial session but it's best to get started before the session.</span></p>
+<p class="red">Tutorial Grading: To get credit for weekly tutorials you need to submit to brightspace your code and a ReadMe.txt file with at least your name, student number and the link to your YouTube screen capture demonstration video. The video should have sound narration and demonstrate that you have met the tutorial requirements. (Make sure your video is &quot;unlisted&quot; and not &quot;private&quot; on YouTube - otherwise we won't be able to view it and it will be counted as missing. Submit a single .zip file with all your contents to Brightspace. Brightspace should allow you to resubmit your file up until the due time and will only keep the most recent submission. Grade is 0,1, or 2 as follows:</p>
+<table border="1">
+  <tr>
+    <th width="83">Mark</th>
+    <th width="716">Tutorial Grading</th>
+  </tr>
+  <tr>
+    <td style="text-align: center"><h1><span class="requirement_danger">0</span></h1>
+      <p>marks</p></td>
+    <td><p><span class="requirement_danger">No submission or incomplete submission. Submissions without accompanying video get a mark of 0</span>.</p>
+      <p>Note: mark is 0 if any of the following are true:<br>
+      <ul>
+        <li>code missing or won't compile and launch.</li>
+        <li>No demonstration video link or link is broken (e.g. private).</li>
+        <li>Work is copied (not unique).</li>
+        <li>No ReadMe.txt file containing YouTube video link</li>
+        <li>Non .zip compression format (only  .zip is accepted)</li>
+        <li class="red">If using NPM modules you MUST NOT submit the <span class="code">node_modules</span> directory but you MUST submit the <span class="code">package.json</span> and <span class="code">package-lock.json</span> files. </li>
+      </ul>
+      <br>
+      </p></td>
+  </tr>
+  <tr>
+    <td style="text-align: center"><h1><span class="requirement_warning">1</span></h1>
+      <p>mark</p></td>
+    <td><p><span class="requirement_warning">Some, but not enough, requirements met or demonstrated</span>.</p>
+      <p>Note: mark is only 1 if any of the following are true:<br>
+      <ul>
+        <li>Video has no voice narration.</li>
+        <li>Cannot make out (see) your code or mouse in your video.</li>
+        <li>Video is too long (keep under 5 mins - like a live demo).</li>
+        <li>Video is not a demo but rather just shows you coding.</li>
+        <li>Not all requested problems attempted and demonstrated.</li>
+        <li>Code works but it's not good programming style.</li>
+      </ul>
+      <br>
+      </p></td>
+  </tr>
+  <tr>
+    <td style="text-align: center"><h1><span class="requirement">2</span></h1>
+      <p>marks</p></td>
+    <td><p><span class="requirement">All requirements met and demonstrated in accompanying video for required problems.</span></p>
+      <p>Does not include problems labelled as &quot;Optional&quot;</p></td>
+  </tr>
+</table>
+<br>
+<p class="segment-header"></p>
+<p class="red"></p>
+<hr>
+<p class="segment-header">&nbsp;</p>
+<p class="segment-header">Preliminary:<br />
+</p>
+<p> This tutorial requires that you have the SQLite command line interface installed on your computer. There is a section in the notes on installing the SQLite command line interface but it is also already installed on in our openstack images. </p>
+<p>SQLite is a very popular serverless relational database. Serverless means there is no separate database server like with MongoDB, or MySQL. There is just the database file within the code of your project and, in the next tutorial, the npm sqlite3 module used to access it from a node.js application. In this tutorial we will be working only on the SQLite command line interface. </p>
+<p>To make sense of this tutorial you will have to have watched the video lecture on Database Concepts.</p>
+<p>&nbsp;</p>
+<hr>
+<p class="segment-header">Problem 1: Accessing The recordings.db Database<br />
+</p>
+<p> Assuming you have SQLite properly installed access the provided <span class="code">recordings.db</span> database by executing the following command in a command terminal open on the directory where your <span class="code">recordings.db</span> file is located:</p>
+<p class="code">sqlite3 recordings.db</p>
+<p>You should see something like the following.</p>
+<p>&nbsp;</p>
+<p><img src="images/prob1-2.png"  alt="" width="710" height="125"/></p>
+<p>Execute the &quot;dot&quot; command</p>
+<p class="code">.tables</p>
+<p><span class="code"><img src="images/prob1-2B.png" width="935" height="95" alt=""/></span></p>
+<p>to see what tables are in the database. </p>
+<p>Recall that the command-line dot commands don't end in a semicolon that but SQL statements do.To exit out of the sqlite3 command line interface you can execute <span class="code">.exit</span>.You can learn about the .dot commands of the sqlite3 CLI by executing <span class="code">.help</span></p>
+<p>I've also included a html document of useful dot commands with the tutorial files. To learn about SQL syntax visit the SQL syntax section of the sqlite.org website:</p>
+<p><a href="https://www.sqlite.org/lang.html">https://www.sqlite.org/lang.html</a></p>
+<p>&nbsp;</p>
+<p></p>
+<p>Execute the following commands to see what is in the albums table. The <span class="code">.mode</span> will set the output to column mode and the <span class="code">.header on</span> will show the names of the table columns in the output.</p>
+<p class="code">.mode column<br>
+  .header on<br>
+select * from albums;</p>
+<p><img src="images/prob1-3.png"  alt="" width="1051" height="447"/></p>
+<p>&nbsp;</p>
+<p>To show only the<span class="code"> album_id</span> and <span class="code">title</span> from the albums table execute:</p>
+<p class="code">select album_id,title from albums;</p>
+<p><img src="images/prob1-3B.png" width="730" height="458" alt=""/></p>
+<p>&nbsp;</p>
+<p>You can control the minimum character width of columns being displayed as follows:</p>
+<p>.<span class="code">width 10 40</span></p>
+<p class="code">select album_id,title from albums;</p>
+<p>&nbsp;</p>
+<p>Next look at the <span class="black-bold">schema</span> for the <span class="code">albums</span> table<br>
+</p>
+<p class="code">.schema albums</p>
+<p><img src="images/prob1-4.png"  alt="" width="1104" height="240"/></p>
+<p>&nbsp;</p>
+<p>The schema shows the columns in the tables and their types which, for our purposes, would be either <span class="code">int</span>, <span class="code">text</span>, or <span class="code">real</span>. Note that SQL is NOT a case-sensitive language (something that is annoying by modern language standards). </p>
+<p>&nbsp;</p>
+<hr>
+<p class="segment-header">&nbsp;</p>
+<p class="segment-header">Problem 2: Understanding The recordings.db Database<br />
+</p>
+<p>&nbsp; </p>
+<p>Here is the ER (Entity Relationship) model of the recordings database. ER models are the traditional way of describing a database architecture.</p>
+<p><img src="images/prob2-1.png" width="856" height="317" alt=""/></p>
+<p>&nbsp;</p>
+<p>The rectangles are entities (typically tables). The bubbles are attributes (typically columns of tables) and the diamonds are relationships between entities. Relationships are either implemented as tables of their own or by adding columns to existing tables. </p>
+<p>In this database <span class="bold">albums</span> represent music albums or CDs. That is, some sort of packaging of recorded music. The <span class="bold">compositions</span> represent written songs. The <span class="bold">recordings</span> represent audio recordings of songs including the name of the audio file of the recording. The <span class="bold">recording of</span> relationship is 1:N indicating there can be many recordings of a particular song but a recording is always of a particular song. The <span class="bold">track of</span> relationship is N:N indicating that an album has many recordings and that a particular recording can appear on many albums.</p>
+<p>&nbsp;</p>
+<p>Here is a schema diagram of how this database is implemented:</p>
+<p><img src="images/prob2-2.png" width="661" height="333" alt=""/></p>
+<p>&nbsp;</p>
+<p>Notice how the <span class="bold">tracks of</span> relationship has been implemented by it own table (<span class="code">album_tracks</span>) where as the <span class="bold">recording of</span> relationship has been implemented by adding a <span class="bold">foreign key</span> to the <span class="code">recordings</span> table. </p>
+<p></p>
+<p>Now lets create an query that will show the names of the songs that appear on the Beatles' &quot;Rubber Soul&quot; album.</p>
+<p>First we will need to know the <span class="code">album_id</span> of the &quot;Rubber Soul&quot; album. Select the <span class="code">album_id</span> and <span class="code">title</span> of the <span class="code">albums</span> table to discover that:</p>
+<p class="code">select album_id,title from albums;</p>
+<p><img src="images/prob2-3.png" width="698" height="405" alt=""/></p>
+<p>&nbsp;</p>
+<p>Now lets discover the names of the songs that appear on the &quot;Rubber Soul&quot; album (notice I'm setting the .width based on the size of column data I'm expecting):</p>
+<p class="code">select * from album_tracks where album_id=105;</p>
+<p class="code"><img src="images/prob2-4.png" width="758" height="455" alt=""/></p>
+<p>&nbsp;</p>
+<p>This query lets us see the recordings that appear on the &quot;Rubber Soul&quot; album but does not show us the names of the songs the recordings represent. The names of the songs are in the <span class="code">compositions</span> table. First we must join the <span class="code">album_tracks</span> table to the <span class="code">recordings</span> table to match the album track rows with their corresponding recordings. The join must always be along the values of a <span class="bold">foreign key</span> (<span class="code">recording_id</span> in this case). This join will allow us to discover the <span class="code">song_id</span> of the composition the recording represents.</p>
+<p class="code">.width 5 5 10 5<br>
+  select album_id,track_number, album_tracks.recording_id, recordings.song_id <br>
+  from <br>
+  album_tracks join recordings on album_tracks.recording_id = recordings.recording_id<br>
+where album_id = 105;</p>
+<p><img src="images/prob2-5.png" width="674" height="481" alt=""/></p>
+<p>&nbsp;</p>
+<p>Notice that the screen capture shows that I'm executing <span class="code">.read query.sql</span> instead of the commands above. Since my query is getting too complicated to type in (and correct) each time I'm placing the query commands in a file text file called <span class="code">query.sql</span> and then just reading that file with a <span class="code">.read</span> command. This way you could edit your query at leisure in the text file and get it right instead of on the command line.</p>
+<p>Next we need to join in the <span class="code">compositions</span> table so we can get access to the actual song names:</p>
+<p class="code">.width 5 5 10 5<br>
+  select album_id,track_number,album_tracks.recording_id,recordings.song_id, compositions.title<br>
+  from <br>
+  album_tracks join recordings on album_tracks.recording_id = recordings.recording_id<br>
+  Join compositions on recordings.song_id = compositions.song_id<br>
+where album_id = 105;</p>
+<p><img src="images/prob2-6.png" width="1081" height="494" alt=""/></p>
+<p>&nbsp;</p>
+<p>Finally lets clean up the query to only show the columns we are interested in:</p>
+<p class="code">select album_id,track_number,compositions.title<br>
+  from <br>
+  album_tracks join recordings on album_tracks.recording_id = recordings.recording_id<br>
+  Join compositions on recordings.song_id = compositions.song_id<br>
+where album_id = 105;</p>
+<p><img src="images/prob2-7.png" width="814" height="513" alt=""/></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<hr>
+<p class="segment-header">&nbsp;</p>
+<p class="segment-header">Problem 3: User Playlists<br />
+</p>
+<p> For this problem we want to add user playlists to the database. Here is an ER model of what we want the database to be:</p>
+<p><img src="images/prob3-1.png" alt="" width="849" height="510"/></p>
+<p>&nbsp;</p>
+<p>Playlists respresent user playlists. Each user can can have multiple playlists with different names. Hence the compound key: <span class="code">user,playlist_name</span>. Recordings appear on playlists. The <span class="black-bold">appears on</span> relationship is N:N indicating the each playlist can have many recordings and a recording can appear on many playlists. </p>
+<p>We are going to represent both the <span class="bold">play_lists</span> entity and the <span class="bold">appears on</span> relationship in a single table: <span class="code">playlist_tracks</span> with the following schema:</p>
+<p><img src="images/prob3-2.png" width="690" height="443" alt=""/></p>
+<p>Create the new <span class="code">playlist_tracks</span> table with the following SQL command</p>
+<p class="code">create table playlist_tracks (<br>
+  user text not null,<br>
+  playlist_name text not null,<br>
+  recording_id integer not null references recordings(recording_id),<br>
+primary key (user,playlist_name,recording_id) );</p>
+<p>Verify your table exists and check its schema by executing:</p>
+<p class="code">.tables</p>
+<p class="code">.schema playlist_tracks</p>
+<p>Find some songs you like in the database and discover the <span class="code">recording_id </span>of their corresponding recordings. Now create some users and playlists tracks by executing insert commands like the followng. Create at least two users with two playlists each and at least three songs on each playlist. (Make sure to notice that the SQL uses single quotes for strings.)</p>
+<p class="code">insert into playlist_tracks values ('Louis', 'favourites', 22800);</p>
+<p>Select everything from your <span class="code">playlist_tracks</span> to see what you have. Mine looked something like this:</p>
+<p class="code">select * from playlist_tracks;</p>
+<p><img src="images/prob3-4.png" width="589" height="445" alt=""/></p>
+<p>&nbsp;</p>
+<p>Finally modify your query so you show the actual names of the songs on the playlist and not just their recording_id:</p>
+<p><img src="images/prob3-5.png" width="871" height="482" alt=""/></p>
+<p>&nbsp;</p>
+<hr>
+<p class="segment-header">&nbsp;</p>
+<p class="red">When you have completed these problems create a screen capture video, with sound, that demonstrates you've completed problem 2 and 3. Submit your code and readme.txt file (containing your YouTube link) to brightpace. </p>
+<p class="segment-header">&nbsp;</p>
+
+</body>
+</html>
